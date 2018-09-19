@@ -2,6 +2,7 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -62,7 +63,11 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String = TODO()
+fun ageDescription(age: Int): String = when {
+    (age % 10 > 1) and (age % 10 <5 ) and (age > 21) -> "$age года"
+    (age % 10 > 4) or (((age % 100) < 20) and ((age % 100) > 4)) -> "$age лет"
+    else -> "$age год"
+}
 
 /**
  * Простая
@@ -73,7 +78,14 @@ fun ageDescription(age: Int): String = TODO()
  */
 fun timeForHalfWay(t1: Double, v1: Double,
                    t2: Double, v2: Double,
-                   t3: Double, v3: Double): Double = TODO()
+                   t3: Double, v3: Double): Double {
+    val distance = t1 * v1 + t2 * v2 + t3 * v3
+    return when {
+        distance / 2.0 <= t1 * v1 -> distance / 2.0 / v1
+        distance / 2.0 <= t1 * v1 + t2 * v2 -> t1 + (distance / 2.0 - t1 * v1) / v2
+        else -> t1 + t2 + (distance / 2.0 - t1 * v1 - t2 * v2) / v3
+    }
+}
 
 /**
  * Простая
@@ -86,7 +98,16 @@ fun timeForHalfWay(t1: Double, v1: Double,
  */
 fun whichRookThreatens(kingX: Int, kingY: Int,
                        rookX1: Int, rookY1: Int,
-                       rookX2: Int, rookY2: Int): Int = TODO()
+                       rookX2: Int, rookY2: Int): Int {
+    val rook1 = if ((kingX == rookX1) or (kingY == rookY1)) 1 else 0
+    val rook2 = if ((kingX == rookX2) or (kingY == rookY2)) 1 else 0
+    return when {
+        (rook1 == 1) and (rook2 == 1) -> 3
+        (rook1 == 0) and (rook2 == 1) -> 2
+        (rook1 == 1) and (rook2 == 0) -> 1
+        else -> 0
+    }
+}
 
 /**
  * Простая
@@ -100,7 +121,16 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
  */
 fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           rookX: Int, rookY: Int,
-                          bishopX: Int, bishopY: Int): Int = TODO()
+                          bishopX: Int, bishopY: Int): Int {
+    val rook = if ((kingX == rookX) or (kingY == rookY)) 1 else 0
+    val bishop = if (abs(kingX - bishopX) == abs(kingY - bishopY)) 1 else 0
+    return when {
+        (rook == 1) and (bishop == 1) -> 3
+        (rook == 0) and (bishop == 1) -> 2
+        (rook == 1) and (bishop == 0) -> 1
+        else -> 0
+    }
+}
 
 /**
  * Простая
