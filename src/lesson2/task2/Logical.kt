@@ -4,6 +4,7 @@ package lesson2.task2
 
 import lesson1.task1.sqr
 import kotlin.math.sqrt
+import kotlin.math.abs
 
 /**
  * Пример
@@ -30,7 +31,7 @@ fun isNumberHappy(number: Int): Boolean =
  * Считать, что ферзи не могут загораживать друг друга.
  */
 fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
-        (x1 == x2) or (y1 == y2) or ((x1 - x2) == (y1 - y2)) or (-(x1 - x2) == (y1 - y2))
+        (x1 == x2) || (y1 == y2) || (abs(x1 - x2) == abs(y1 - y2))
 
 
 /**
@@ -67,8 +68,8 @@ fun circleInside(x1: Double, y1: Double, r1: Double,
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = when {
-    (a >= r) && ((b >= s) || (c >= s)) -> true
-    (b >= r) && ((a >= s) || (c >= s)) -> true
-    (c >= r) && ((a >= s) || (b >= s)) -> true
+    (r >= a) && ((s >= b) || (s >= c)) -> true
+    (r >= b) && ((s >= a) || (s >= c)) -> true
+    (r >= c) && ((s >= a) || (s >= b)) -> true
     else -> false
 }

@@ -65,7 +65,7 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  */
 fun ageDescription(age: Int): String = when {
     (age % 10 in 2..4) && (age % 100 !in 12..14) -> "$age года"
-    (age % 100 in 10..19) || (age % 10 in 5..9) -> "$age лет"
+    (age % 100 in 10..19) || (age % 10 in 5..9) || (age % 10 == 0) -> "$age лет"
     else -> "$age год"
 }
 
@@ -143,8 +143,8 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
 fun triangleKind(a: Double, b: Double, c: Double): Int = when {
     ((a * a + b * b) > c * c) && ((b * b + c * c) > a * a) && ((c * c + a * a) > b * b) -> 0
     ((a * a + b * b) == c * c) || ((b * b + c * c) == a * a) || ((c * c + a * a) == b * b) -> 1
-    ((a * a + b * b) < c * c) && (a + b > c) || ((b * b + c * c) < a * a) && (b + c > a) || ((c * c + a * a) < b * b) && (c + a > b) -> 2
-    else -> -1
+    (a >= b + c) || (b >= a + c) || (c >= a + b) -> -1
+    else -> 2
 }
 
 /**
