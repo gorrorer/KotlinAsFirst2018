@@ -3,9 +3,7 @@
 package lesson3.task1
 
 import lesson7.task1.alignFileByWidth
-import kotlin.math.sqrt
-import kotlin.math.abs
-import kotlin.math.pow
+import kotlin.math.*
 
 
 /**
@@ -72,13 +70,13 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun digitNumber(n: Int): Int {
-    var number = n / 10
-    var count = 1
+    var number = abs(n)
+    var count = 0
     while (number > 0) {
         count++
         number /= 10
     }
-    return count
+    if (n == 0) return 1 else return count
 }
 
 /**
@@ -106,10 +104,11 @@ fun fib(n: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var k = maxOf(m, n)
-    while (!((k % m == 0) && (k % n == 0)))
-        k++
-    return k
+    var mDyn = m
+    var nDyn = n
+    while ((mDyn != 0) && (nDyn != 0))
+        if (mDyn > nDyn) mDyn -= nDyn else nDyn -= mDyn
+    return m * n / (nDyn + mDyn)
 }
 
 /**
@@ -118,11 +117,9 @@ fun lcm(m: Int, n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    var divisor = 2
-    if (isPrime(n)) return n
-    while (n % divisor > 0)
-        divisor++
-    return divisor
+    for (divisor in 2..sqrt(n.toDouble()).toInt())
+        if (n % divisor == 0) return divisor
+    return n
 }
 
 /**
@@ -152,12 +149,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * то есть, существует ли такое целое k, что m <= k*k <= n.
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
-fun squareBetweenExists(m: Int, n: Int): Boolean {
-    var number = 1
-    while (number * number <= n)
-        if (number * number in m..n) return true else number++
-    return false
-}
+fun squareBetweenExists(m: Int, n: Int): Boolean = ceil(sqrt(m.toDouble())) <= floor(sqrt(n.toDouble()))
 
 /**
  * Средняя
@@ -192,7 +184,20 @@ fun collatzSteps(x: Int): Int {
  * sin(x) = x - x^3 / 3! + x^5 / 5! - x^7 / 7! + ...
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
-fun sin(x: Double, eps: Double): Double = TODO()
+fun sin(x: Double, eps: Double): Double {
+    val xDyn = x % (2 * PI)
+    var sum = xDyn
+    var member = xDyn
+    var count = 1.0
+    while (true) {
+        member = -member * xDyn * xDyn / (count + 1) / (count + 2)
+        if (abs(member) < eps)
+            break
+        sum += member
+        count += 2
+    }
+    return sum
+}
 
 /**
  * Средняя
@@ -201,7 +206,20 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * cos(x) = 1 - x^2 / 2! + x^4 / 4! - x^6 / 6! + ...
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+fun cos(x: Double, eps: Double): Double {
+    val xDyn = x % (2 * PI)
+    var sum = 1.0
+    var member = 1.0
+    var count = 0.0
+    while (true) {
+        member = -member * xDyn * xDyn / (count + 1) / (count + 2)
+        if (abs(member) < eps)
+            break
+        sum += member
+        count += 2
+    }
+    return sum
+}
 
 /**
  * Средняя
@@ -213,20 +231,11 @@ fun cos(x: Double, eps: Double): Double = TODO()
 fun revert(n: Int): Int {
     var number = 0
     var x = n
-    var count = 0
-    var factor = 1
     while (x > 0) {
-        count++
-        x /= 10
-        factor *= 10
-    }
-    x = n
-    for (count in count downTo 1) {
-        number += (x % 10) * factor
-        factor /= 10
+        number = number * 10 + x % 10
         x /= 10
     }
-    return number / 10
+    return number
 }
 
 /**
