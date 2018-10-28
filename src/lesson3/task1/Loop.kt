@@ -76,7 +76,7 @@ fun digitNumber(n: Int): Int {
         count++
         number /= 10
     }
-    if (n == 0) return 1 else return count
+    return if (n == 0) 1 else count
 }
 
 /**
