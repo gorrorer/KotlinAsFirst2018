@@ -2,6 +2,14 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+import java.time.Month
+
+val MONTHS = listOf("января", "февраля", "марта",
+        "апреля", "мая", "июня",
+        "июля", "августа", "сентября",
+        "октября", "ноября", "ферваля")
+
 /**
  * Пример
  *
@@ -49,12 +57,10 @@ fun main(args: Array<String>) {
         val seconds = timeStrToSeconds(line)
         if (seconds == -1) {
             println("Введённая строка $line не соответствует формату ЧЧ:ММ:СС")
-        }
-        else {
+        } else {
             println("Прошло секунд с начала суток: $seconds")
         }
-    }
-    else {
+    } else {
         println("Достигнут <конец файла> в процессе чтения строки. Программа прервана")
     }
 }
@@ -71,7 +77,20 @@ fun main(args: Array<String>) {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val date = str.split(" ").toMutableList()
+    if (date.size != 3) return ""
+    try {
+        date[1] = (MONTHS.indexOf(date[1]) + 1).toString()
+        if (date[1] == "0") return ""
+        if (date[0].toInt() > daysInMonth(date[1].toInt(), date[2].toInt())) return ""
+        if (date[0].toInt() < 10) date[0] = "0" + date[0]
+        if (date[1].toInt() < 10) date[1] = "0" + date[1]
+        return date.joinToString(separator = ".")
+    } catch (e: Exception) {
+        return ""
+    }
+}
 
 /**
  * Средняя
@@ -83,7 +102,18 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val date = digital.split(".").toMutableList()
+    if (date.size != 3) return ""
+    try {
+        if (date[0].toInt() > daysInMonth(date[1].toInt(), date[2].toInt())) return ""
+        date[1] = MONTHS[date[1].toInt() - 1]
+        date[0] = date[0].toInt().toString()
+        return date.joinToString(separator = " ")
+    } catch (e: Exception) {
+        return ""
+    }
+}
 
 /**
  * Средняя
@@ -97,7 +127,12 @@ fun dateDigitToStr(digital: String): String = TODO()
  * Все символы в номере, кроме цифр, пробелов и +-(), считать недопустимыми.
  * При неверном формате вернуть пустую строку
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    if (Regex("""\d""").matches(phone)) return phone
+    if (Regex("""(\+?|\d)\d+?\s*(\(\d+\))?((\s*-*)*\d+)+""").matches(phone))
+        return Regex("""(-)|(\s)|(\()|(\))""").replace(phone, "")
+    return ""
+}
 
 /**
  * Средняя
@@ -109,7 +144,15 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    if ((Regex("""(\s?\d?%?-?\s?)+""").matches(jumps))
+            && (Regex("""\d+""").find(jumps, 0) != null)) {
+        return Regex("""((%)|(-))\s?""").replace(jumps, "")
+                .split(" ")
+                .maxBy { it.toInt() }!!.toInt()
+    }
+    return -1
+}
 
 /**
  * Сложная
