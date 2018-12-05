@@ -2,6 +2,7 @@
 
 package lesson5.task1
 
+import jdk.nashorn.internal.ir.annotations.Ignore
 import kotlinx.html.InputType
 
 /**
@@ -98,9 +99,9 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
     val res = mapB.plus(mapA).toMutableMap()
-    for ((name, _) in res) {
-        if ((res[name] != mapB[name]) and (mapB[name] != null))
-            res[name] = res[name] + ", " + mapB[name]
+    for ((name, number) in res) {
+        if ((number != mapB[name]) and (mapB[name] != null))
+            res[name] = number + ", " + mapB[name]
     }
     return res
 }
@@ -220,7 +221,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) = a.keys.r
  *
  * Для двух списков людей найти людей, встречающихся в обоих списках
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.filter { it == b[a.indexOf(it)] }
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.intersect(b).toList()
 
 /**
  * Средняя
@@ -231,7 +232,8 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.filter { it
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = chars.containsAll(word.toList())
+fun canBuildFrom(chars: List<Char>, word: String): Boolean = chars.onEach { it.toLowerCase() }
+        .containsAll(word.toLowerCase().toList())
 
 /**
  * Средняя
@@ -258,8 +260,10 @@ fun extractRepeats(list: List<String>): Map<String, Int> =
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    for (word in words)
-        if (word.reversed() == words.filter { it == word.reversed() }.joinToString()) return true
+    val checkList = words.map { it.toList().sorted() }
+    for (i in 0 until checkList.size - 1)
+        for (k in i + 1 until checkList.size)
+            if (checkList[i] == checkList[k]) return true
     return false
 }
 
@@ -284,7 +288,7 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     for (num in 0 until list.size)
         if (list.any { (list[num] + it == number) and (list.lastIndexOf(it) != num) })
             return Pair(num, list.lastIndexOf(number - list[num]))
-    return Pair(-1, -1)
+    return -1 to -1
 }
 
 /**
