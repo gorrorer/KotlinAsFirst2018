@@ -114,7 +114,7 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> =
-        grades.toList().groupBy { it.second }.mapValues { it.value.map { (k, _) -> k } }
+        grades.toList().groupBy { it.second }.mapValues { it.value.map { (k, v) -> k } }
 
 /**
  * Простая
