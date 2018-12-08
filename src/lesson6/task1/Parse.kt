@@ -230,9 +230,7 @@ fun mostExpensive(description: String): String {
                 .map { it.split(" ") }
                 .map { it -> Pair(it[0], it[1].toDouble()) }
                 .maxBy { (_, value) -> value }!!.first
-    } catch (e: Exception) {
-        ""
-    }
+    } catch (e: Exception) { "" }
 }
 
 /**
