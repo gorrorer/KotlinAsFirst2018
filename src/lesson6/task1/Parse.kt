@@ -9,7 +9,7 @@ import java.time.Month
 val MONTHS = listOf("января", "февраля", "марта",
         "апреля", "мая", "июня",
         "июля", "августа", "сентября",
-        "октября", "ноября", "ферваля")
+        "октября", "ноября", "декабря")
 
 /**
  * Пример
@@ -84,7 +84,7 @@ fun dateStrToDigit(str: String): String {
     try {
         date[1] = (MONTHS.indexOf(date[1]) + 1).toString()
         if ((date[0].toInt() > daysInMonth(date[1].toInt(), date[2].toInt()))
-                || (date[1].toInt() > 0)) return ""
+                || (date[1].toInt() == 0)) return ""
         return String.format("%02d.%02d.%d", date[0].toInt(), date[1].toInt(), date[2].toInt())
     } catch (e: Exception) {
         return ""
@@ -144,10 +144,10 @@ fun flattenPhoneNumber(phone: String): String {
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 fun bestLongJump(jumps: String): Int {
-    if ((Regex("""(\s?\d?%?-?\s?)+""").matches(jumps))
+    if ((Regex("""(\s*\d*%?-?\s*)+""").matches(jumps))
             && (Regex("""\d+""").find(jumps, 0) != null)) {
-        return Regex("""((%)|(-))\s?""").replace(jumps, "")
-                .split(" ")
+        return Regex("""\s*((%)|(-))""").replace(jumps, "")
+                .split(Regex("""\s+"""))
                 .maxBy { it.toInt() }!!.toInt()
     }
     return -1
@@ -165,8 +165,8 @@ fun bestLongJump(jumps: String): Int {
  */
 fun bestHighJump(jumps: String): Int {
     if (Regex("""(\s?\d*\s[%+-]*\s?)+""").matches(jumps)) {
-        val result = Regex("""\s?\d+\s[^+\s]+(?!\+)""").replace(jumps, "")
-        return Regex("""\s[+\-%]+""").replace(result, "").split(" ").maxBy { it.toInt() }!!.toInt()
+        val result = Regex("""\s?\d+\s[^+\s]+(?!\+)\s?""").replace(jumps, "")
+        return Regex("""[^\d]+$""").replace(result, "").split(Regex("""[^\d]+""")).maxBy { it.toInt() }!!.toInt()
     }
     return -1
 }
@@ -182,7 +182,7 @@ fun bestHighJump(jumps: String): Int {
  */
 fun plusMinus(expression: String): Int {
     val e = IllegalArgumentException()
-    if (Regex("""(^\d+)+((\s[+\-]\s\d+)?)+""").matches(expression)) {
+    if (Regex("""(^\d+)+(\s[+\-]\s\d+)*""").matches(expression)) {
         val numbers = expression.split(" ").toMutableList()
         var count = 0
         while (count <= numbers.size - 2) {
@@ -208,8 +208,10 @@ fun plusMinus(expression: String): Int {
  */
 fun firstDuplicateIndex(str: String): Int {
     return try {
-        Regex("""([а-я]+)\s\1""").find(str.toLowerCase())!!.range.first
-    } catch (e: Exception) { -1 }
+        Regex("""([^\s]+)\s\1""").find(str.toLowerCase())!!.range.first
+    } catch (e: Exception) {
+        -1
+    }
 }
 
 /**
@@ -230,7 +232,9 @@ fun mostExpensive(description: String): String {
                 .map { it.split(" ") }
                 .map { it -> Pair(it[0], it[1].toDouble()) }
                 .maxBy { (_, value) -> value }!!.first
-    } catch (e: Exception) { "" }
+    } catch (e: Exception) {
+        ""
+    }
 }
 
 /**

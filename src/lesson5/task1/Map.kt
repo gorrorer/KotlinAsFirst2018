@@ -114,7 +114,7 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> =
-        grades.toList().groupBy { it.second }.mapValues { it.value.map { (k, v) -> k } }
+        grades.toList().groupBy { it.second }.mapValues { it.value.map { (k, _) -> k } }
 
 /**
  * Простая
@@ -272,9 +272,12 @@ fun hasAnagrams(words: List<String>): Boolean {
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    for (num in 0 until list.size)
-        if (list.any { (list[num] + it == number) and (list.lastIndexOf(it) != num) })
-            return Pair(num, list.lastIndexOf(number - list[num]))
+    val list1 = list.toMutableList()
+    for (element in list1) {
+        val testList = list1 - element
+        if (number - element in testList)
+            return Pair(list.indexOf(element), testList.indexOf(number - element) + 1)
+    }
     return -1 to -1
 }
 
