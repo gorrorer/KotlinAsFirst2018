@@ -216,7 +216,18 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
-    TODO()
+    val outputFile = File(outputName).bufferedWriter()
+    var output = listOf<String>()
+    var input = File(inputName).readLines()
+    val maxLength = input.maxBy { it.length }!!.length
+    input = input.filter {
+        (it.length == maxLength)
+                && (it.toLowerCase().toCharArray().size == it.toLowerCase().toCharArray().toSet().size)
+    }
+    for (i in 0 until input.size)
+        output += input[i]
+    outputFile.write(output.joinToString(", "))
+    outputFile.close()
 }
 
 /**
