@@ -98,7 +98,8 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+    var outputSteam = File(outputName).bufferedWriter()
+    var input = File(inputName).readLines()
 }
 
 /**
@@ -217,16 +218,10 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     val outputFile = File(outputName).bufferedWriter()
-    var output = listOf<String>()
-    var input = File(inputName).readLines()
-    val maxLength = input.maxBy { it.length }!!.length
-    input = input.filter {
-        (it.length == maxLength)
-                && (it.toLowerCase().toCharArray().size == it.toLowerCase().toCharArray().toSet().size)
-    }
-    for (i in 0 until input.size)
-        output += input[i]
-    outputFile.write(output.joinToString(", "))
+    val input = File(inputName).readLines()
+            .filter { it.toLowerCase().toCharArray().size == it.toLowerCase().toCharArray().toSet().size }
+    val maxSize = input.maxBy { it.length }!!.length
+    outputFile.write(input.filter { it.length == maxSize }.joinToString(separator = ", "))
     outputFile.close()
 }
 
