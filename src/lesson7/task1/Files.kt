@@ -5,6 +5,7 @@ package lesson7.task1
 import java.awt.Point
 import java.io.File
 import kotlin.math.*
+import kotlin.system.exitProcess
 
 /**
  * Пример
@@ -102,7 +103,8 @@ fun sibilants(inputName: String, outputName: String) {
 fun centerFile(inputName: String, outputName: String) {
     val outputSteam = File(outputName).bufferedWriter()
     val input = File(inputName).readLines().toMutableList()
-    val maxSize = input.maxBy { it.length }!!.length
+    var maxSize = input.maxBy { it.length }?.length
+    if (maxSize == null) maxSize = 0
     for (i in 0 until input.size) {
         if (input[i].length < maxSize) {
             input[i] = input[i].trim()
@@ -231,12 +233,11 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     val outputFile = File(outputName).bufferedWriter()
-    outputFile.write("")
     val input = File(inputName).readLines()
             .filter { it.toLowerCase().toCharArray().size == it.toLowerCase().toCharArray().toSet().size }
-    val maxSize = input.maxBy { it.length }!!.length
+    var maxSize = input.maxBy { it.length }?.length
+    if (maxSize == null) maxSize = 0
     outputFile.write(input.filter { it.length == maxSize }.joinToString(separator = ", "))
-    outputFile.write("")
     outputFile.close()
 }
 
