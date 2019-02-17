@@ -101,7 +101,6 @@ fun sibilants(inputName: String, outputName: String) {
  */
 fun centerFile(inputName: String, outputName: String) {
     val outputSteam = File(outputName).bufferedWriter()
-    outputSteam.write("")
     val input = File(inputName).readLines().toMutableList()
     val maxSize = input.maxBy { it.length }!!.length
     for (i in 0 until input.size) {
@@ -110,6 +109,7 @@ fun centerFile(inputName: String, outputName: String) {
             input[i] = input[i].padStart((maxSize - input[i].length) / 2 + input[i].length)
         }
         outputSteam.write(input[i])
+        outputSteam.write("")
         outputSteam.newLine()
     }
     outputSteam.close()
@@ -236,6 +236,7 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
             .filter { it.toLowerCase().toCharArray().size == it.toLowerCase().toCharArray().toSet().size }
     val maxSize = input.maxBy { it.length }!!.length
     outputFile.write(input.filter { it.length == maxSize }.joinToString(separator = ", "))
+    outputFile.write("")
     outputFile.close()
 }
 
