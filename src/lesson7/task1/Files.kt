@@ -2,7 +2,9 @@
 
 package lesson7.task1
 
+import java.awt.Point
 import java.io.File
+import kotlin.math.*
 
 /**
  * Пример
@@ -109,6 +111,7 @@ fun centerFile(inputName: String, outputName: String) {
         outputSteam.write(input[i])
         outputSteam.newLine()
     }
+    outputSteam.write("")
     outputSteam.close()
 }
 
@@ -232,6 +235,7 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
             .filter { it.toLowerCase().toCharArray().size == it.toLowerCase().toCharArray().toSet().size }
     val maxSize = input.maxBy { it.length }!!.length
     outputFile.write(input.filter { it.length == maxSize }.joinToString(separator = ", "))
+    outputFile.write("")
     outputFile.close()
 }
 
@@ -443,5 +447,17 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     TODO()
+}
+
+
+fun meanInTable(inputName: String, range: String): Double {
+    val matrix = File(inputName).readLines().toMutableList().map { it.split(", ") }
+    val point = Point(range[0].toInt() - 65, range[1].toInt() - 49)
+    val point1 = Point(range[3].toInt() - 65, range[4].toInt() - 49)
+    var sum = 0.0
+    for (i in point.x..point1.x)
+        for (k in point.y..point1.y)
+            sum += matrix[i][k].toDouble()
+    return sum / ((abs(point.x - point1.x) + 1) * (abs(point.y - point1.y) + 1))
 }
 
